@@ -2,6 +2,8 @@ import css from './ImageGallery.module.css';
 import React, { Component } from "react";
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import { Audio } from 'react-loader-spinner';
+import shortid from 'shortid';
+
 
 const ENDPOINT = `https://pixabay.com/api/?key=33283297-a16e2a82cec1eccc6e35e3730`
 
@@ -22,9 +24,11 @@ export default class ImageGallery extends Component {
                     }
                 })
                 .then(res => {
+                    // console.log(res.totalHits);
                     this.props.addImages(res.hits.map(({ id, webformatURL, largeImageURL }) => {
                         return { id, webformatURL, largeImageURL }
-                    }))
+                    }));
+                    this.props.totalHits(res.totalHits);
                 })
                 .catch(error => this.setState({ error }))
                 .finally(() => this.setState({ loading: false }));
@@ -68,7 +72,7 @@ export default class ImageGallery extends Component {
                     </li>}
                     {searchArr && searchArr.map(item => (
                         <ImageGalleryItem
-                            key={item.id}
+                            key={shortid.generate()}
                             id={item.id}
                             webformatURL={item.webformatURL}
                             largeImageURL={item.largeImageURL}

@@ -12,12 +12,14 @@ class App extends Component {
     searchArr: [],
     showModal: false,
     pickedImg: '',
-    currentPage: 1
+    currentPage: 1,
+    totalHits: null
   }
 
   handleFormSubmit = (searchName) => {
     this.setState(({ searchArr }) => ({
-      searchArr: []
+      searchArr: [],
+       currentPage: 1
     }));
     this.setState({ searchName }); 
   }
@@ -42,6 +44,12 @@ class App extends Component {
     }));
   }
 
+  addTotalHits = (res) => {
+    this.setState(({ totalHits }) => ({
+      totalHits: res
+    }));
+  }
+
   loadMoreImg = (e) => {
     e.preventDefault()
     this.setState(({ currentPage }) => ({
@@ -50,7 +58,7 @@ class App extends Component {
   }
 
   render() {
-    const { searchName, showModal, pickedImg, currentPage, searchArr } = this.state;
+    const { searchName, showModal, pickedImg, currentPage, searchArr, totalHits } = this.state;
 
     return (
       <div>
@@ -64,8 +72,9 @@ class App extends Component {
           addImages={this.addImages}
           currentPage={currentPage}
           searchArr={searchArr}
+          totalHits={this.addTotalHits}
         />
-        {searchArr.length > 0  && <Button onClick={this.loadMoreImg} />}
+        {searchArr.length > 0  && (totalHits - (currentPage*12)) > 0  && <Button onClick={this.loadMoreImg} />}
         <ToastContainer autoClose={3000} />
         {showModal && <Modal
           onClose={this.toggleModal}

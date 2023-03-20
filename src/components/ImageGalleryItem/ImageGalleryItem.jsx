@@ -1,5 +1,8 @@
 import css from './ImageGalleryItem.module.css';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import shortid from 'shortid';
+
+
 
 export default class ImageGallery extends Component {
 
@@ -11,7 +14,7 @@ export default class ImageGallery extends Component {
         const { id, webformatURL, largeImageURL } = this.props;
         return (
             <>
-                <li className={css.ImageGalleryItem} key={id} onClick={this.elClick}>
+                <li className={css.ImageGalleryItem} key={shortid.generate()} onClick={this.elClick}>
                     <img className={css.ImageGalleryItem_image} src={webformatURL} alt={id} srcSet={largeImageURL} />
                 </li>
             </>
