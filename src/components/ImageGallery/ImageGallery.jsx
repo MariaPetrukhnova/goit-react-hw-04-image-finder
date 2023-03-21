@@ -24,7 +24,6 @@ export default class ImageGallery extends Component {
                     }
                 })
                 .then(res => {
-                    // console.log(res.totalHits);
                     this.props.addImages(res.hits.map(({ id, webformatURL, largeImageURL }) => {
                         return { id, webformatURL, largeImageURL }
                     }));
@@ -32,9 +31,7 @@ export default class ImageGallery extends Component {
                 })
                 .catch(error => this.setState({ error }))
                 .finally(() => this.setState({ loading: false }));
-        }
-
-        if (prevProps.currentPage !== this.props.currentPage) {
+        } else if (prevProps.currentPage !== this.props.currentPage) {
                 this.setState({ loading: true, error: null })
                 fetch(`${ENDPOINT}&q=${this.props.searchName}&page=${this.props.currentPage.toString()}&image_type=photo&orientation=horizontal&per_page=12`)
                     .then((res) => {
