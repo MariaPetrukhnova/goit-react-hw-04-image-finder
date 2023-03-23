@@ -36,7 +36,8 @@ export default function ImageGallery({ searchName, toggleModal, imgPick, addImag
                     .catch(error => setError(error))
                     .finally(() => setLoading(false));
         }
-    }, [searchName, currentPage]);
+    // eslint-disable-next-line
+    }, [searchName, currentPage]); 
 
     return (
         <ul className={css.ImageGallery}>
