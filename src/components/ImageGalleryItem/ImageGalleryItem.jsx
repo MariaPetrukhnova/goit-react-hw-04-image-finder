@@ -1,24 +1,25 @@
 import css from './ImageGalleryItem.module.css';
-import React, { Component } from 'react';
 import shortid from 'shortid';
+import PropTypes from 'prop-types';
 
+export default function ImageGalleryItem({ id, largeImageURL, webformatURL, toggleModal }) {
 
-
-export default class ImageGallery extends Component {
-
-    elClick = (e) => {
-        this.props.toggleModal(this.props.largeImageURL)
+    const elClick = (e) => {
+        toggleModal(largeImageURL);
     }
 
-    render() {
-        const { id, webformatURL, largeImageURL } = this.props;
-        return (
-            <>
-                <li className={css.ImageGalleryItem} key={shortid.generate()} onClick={this.elClick}>
-                    <img className={css.ImageGalleryItem_image} src={webformatURL} alt={id} srcSet={largeImageURL} />
-                </li>
-            </>
-        )
+    return (
+        <>
+            <li className={css.ImageGalleryItem} key={shortid.generate()} onClick={elClick}>
+                <img className={css.ImageGalleryItem_image} src={webformatURL} alt={id} srcSet={largeImageURL} />
+            </li>
+        </>
+    )
+}
 
-    }
+ImageGalleryItem.propTypes = {
+    toggleModal: PropTypes.func,
+    id: PropTypes.number,
+    largeImageURL: PropTypes.string,
+    webformatURL: PropTypes.string,
 }

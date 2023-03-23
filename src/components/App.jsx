@@ -1,90 +1,70 @@
-import React, { Component } from "react";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Modal from './Modal/Modal';
 import Button from "./Button/Button";
+import { useState } from "react";
 
-class App extends Component {
-  state = {
-    searchName: '',
-    searchArr: [],
-    showModal: false,
-    pickedImg: '',
-    currentPage: 1,
-    totalHits: null
+export default function App() {
+
+const [searchName, setSearchName] = useState('');
+const [searchArr, setSearchArr] = useState([]);
+const [showModal, setShowModal] = useState(false);
+const [pickedImg, setPickedImg] = useState('');
+const [currentPage, setCurrentPage] = useState(1);
+const [totalHits, setTotalHits] = useState(null);
+
+const handleFormSubmit = (searchName) => {
+    setSearchArr([]);
+    setCurrentPage(1);
+    setSearchName(searchName); 
   }
 
-  handleFormSubmit = (searchName) => {
-    this.setState(({ searchArr }) => ({
-      searchArr: [],
-       currentPage: 1
-    }));
-    this.setState({ searchName }); 
+  const handlePickedImg = (url) => {
+    setPickedImg(url);
   }
 
-  handlePickedImg = (url) => {
-    this.setState({pickedImg: url})
+  const toggleModal = (img) => {
+      setShowModal(!showModal);
+      setPickedImg(img);
   }
 
-  toggleModal = (img) => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-      pickedImg: img
-    }));
-  }
+  const addImages = (res) => {
+      setSearchArr([ ...searchArr, ...res ])
+  };
 
-  addImages = (res) => {
-    this.setState(({ searchArr }) => ({
-      searchArr: [
-        ...searchArr,
-        ...res
-      ]
-    }));
-  }
+  const addTotalHits = (res) => {
+    setTotalHits(res)
+  };
 
-  addTotalHits = (res) => {
-    this.setState(({ totalHits }) => ({
-      totalHits: res
-    }));
-  }
-
-  loadMoreImg = (e) => {
+  const loadMoreImg = (e) => {
     e.preventDefault()
-    this.setState(({ currentPage }) => ({
-      currentPage: currentPage + 1
-    }));
-  }
+    setCurrentPage(currentPage + 1);
+  };
 
-  render() {
-    const { searchName, showModal, pickedImg, currentPage, searchArr, totalHits } = this.state;
 
     return (
       <div>
         <Searchbar
-          onSubmit={this.handleFormSubmit}
+          onSubmit={handleFormSubmit}
         />
         <ImageGallery
           searchName={searchName}
-          toggleModal={this.toggleModal}
-          imgPick={this.handlePickedImg}
-          addImages={this.addImages}
+          toggleModal={toggleModal}
+          imgPick={handlePickedImg}
+          addImages={addImages}
           currentPage={currentPage}
           searchArr={searchArr}
-          totalHits={this.addTotalHits}
+          totalHits={addTotalHits}
         />
-        {searchArr.length > 0  && (totalHits - (currentPage*12)) > 0  && <Button onClick={this.loadMoreImg} />}
+        {searchArr.length > 0  && (totalHits - (currentPage*12)) > 0  && <Button onClick={loadMoreImg} />}
         <ToastContainer autoClose={3000} />
         {showModal && <Modal
-          onClose={this.toggleModal}
+          onClose={toggleModal}
           imgToShow={pickedImg}
         />}
         
       </div>
     );
-  };
-
-}
-
-export default App;
+};
